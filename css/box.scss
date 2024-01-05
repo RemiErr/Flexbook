@@ -1,0 +1,181 @@
+/* ================ Color ================= */
+$dark: #303030;
+$white: #e1e1e1;
+$gray: #464646;
+$green: #1a9973;
+$red: #992b23e8;
+$blue: #0864bb;
+/* ======================================== */
+
+
+
+/* ================ Size ================= */
+$nav_open_size: 250px;
+$nav_closed_size: 50px;
+$ani_time_1: all .5s;
+$ani_time_2: all .2s;
+
+$icon_size: 40px;
+$icon_pad: 10px;
+
+$list_line_height: 40px;
+/* ======================================== */
+
+
+
+// 側邊欄
+.nav-box {
+    // 決定最大寬度
+    width: $nav_closed_size;
+    transition: $ani_time_1;
+    background-color: $white;
+
+    // 偽元素: 蓋版遮醜
+    &::before{
+        // 空內容
+        content: '';
+
+        transition: $ani_time_1;
+        width: $nav_closed_size;
+        height: 100%;
+        position: fixed;
+        overflow: hidden;
+        background-color: $white;
+        z-index: 2;
+    }
+
+    // 偽元素: 推出選單
+    &::after{
+        // 空內容
+        content: '';
+    
+        // 內容占用寬度
+        width: 50px;
+        height: 0;
+        transition: $ani_time_1;
+    }
+
+    // icon
+    .menu-icon {
+        // top: -8px;
+        padding-left: $icon_pad;
+        height: calc($icon_size + 20px);
+        font-size: $icon_size;
+        z-index: 2;
+        transition: $ani_time_1;
+    }
+    
+    // 選項區
+    .menu-list {
+        width: 0;
+        // height: 90%;
+        line-height: $list_line_height;
+        transition: $ani_time_1;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    // 第二層選項
+    .has-sub{
+        // 取消水平置中
+        align-items: normal;
+
+        .sub{
+            // 關閉時隱藏
+            display: none;
+
+            // 懸浮 固定位置
+            position: fixed;
+            left: $nav_open_size;
+
+            // 左上, 右上, 右下, 左下
+            border-radius: 0 10px 10px 0;
+            border-left: 5px solid $dark;
+            
+            // 子選單大小
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            transition: $ani_time_2;
+            z-index: 2;
+            .item{
+                font-size: 0px !important;
+                padding: 15px;
+            }
+        }    
+    }
+    .has-sub:hover, .has-sub.active{
+        .sub{
+            width: auto;
+            height: auto;
+            backdrop-filter: blur(3px);
+            background-color: rgba(darken($white, 10%), 0.7);
+            box-shadow: 1px 1px 5px $gray;
+
+
+            .item{
+                font-size: 16px !important;
+            }
+
+            .item:hover{
+                background-color: rgba(darken($green, 5%), 0.6);
+            }
+        }
+    }
+
+
+    // 所有選項
+    .item{
+        width: 100%;
+        font-size: 0px;
+        color: transparent;
+        transition: $ani_time_1;
+        
+        &:hover{
+            background-color: rgba($green, 0.6);
+        }
+    }
+}
+
+
+// 選單開合
+#menu:checked{
+    // 打開選單
+    & ~ .nav-box,
+    & ~ .nav-box::after,
+    & ~ .nav-box .menu-list {
+        width: $nav_open_size;
+    }
+
+    & ~ .nav-box::before{
+        width: 0;
+        opacity: 0.6;
+        // border: 1px solid $dark;
+    }
+
+    // icon
+    & ~ .nav-box .menu-icon {
+        font-size: calc($icon_size - $icon_pad);
+        padding-top: $icon_pad;
+        padding-left: $icon_pad;
+        width: 100%;
+    }
+
+    // 選項
+    & ~ .nav-box .menu-list .item{
+        font-size: 16px;
+        color: $dark;
+    }
+
+    // 子選單位置
+    & ~ .nav-box .menu-list .ts-menu .has-sub .sub{
+        // 取消子選單隱藏
+        display: block;
+    }
+}
+
+// Chack Box Hide
+#menu {
+    display: none;
+}
+
